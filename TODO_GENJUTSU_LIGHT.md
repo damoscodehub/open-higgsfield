@@ -97,7 +97,7 @@ settings, validation, and result actions supported by Higgsfield's API:
 
 ### 6. Verify and document
 
-- [ ] Add focused tests for the request mapper, catalog defaults, media
+- [x] Add focused tests for the request mapper, catalog defaults, media
   validation, and result-status normalization.
 - [x] Run type checking and a production build.
 - [ ] Manually check Genjutsu Light: empty prompt accepted; missing video or
