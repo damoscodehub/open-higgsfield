@@ -123,6 +123,10 @@ pnpm install
 pnpm dev            # http://localhost:3000
 ```
 
+On Windows, you can instead double-click [Launch AI UI.cmd](<Launch%20AI%20UI.cmd>).
+It starts the app and opens it in your browser. It installs dependencies only
+when the committed lockfile has changed.
+
 Open the studio, press **Add key**, and paste your platform key as `id:secret`.
 
 ### Environment
