@@ -107,19 +107,38 @@ Each generate is one object: `{ model, prompt, media, settings }`.
 
 ## Getting started
 
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 22 or newer.
+- pnpm 11. On Windows, install it once for your user account with:
+
+  ```powershell
+  npm install -g pnpm@11
+  ```
+
+### Run locally
+
 ```bash
 pnpm install
 pnpm dev            # http://localhost:3000
 ```
+
+On Windows, you can instead double-click [Launch AI UI.cmd](<Launch%20AI%20UI.cmd>).
+It starts the app and opens it in your browser. It installs dependencies only
+when the committed lockfile has changed.
 
 Open the studio, press **Add key**, and paste your platform key as `id:secret`.
 
 ### Environment
 
 ```bash
-HF_API_BASE_URL=                      # generation API origin, server only
+HF_API_BASE_URL=https://api.higgsfield.ai
 OPEN_HIGGSFIELD_READ_WRITE_TOKEN=     # Vercel Blob read-write token
 ```
+
+Copy `.env.example` to `.env.local`, then add the Blob token. Each visitor
+provides their own Higgsfield `id:secret` key in the app; do not put that key
+in an environment file.
 
 ### Commands
 
