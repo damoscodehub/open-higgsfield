@@ -32,29 +32,29 @@ settings, validation, and result actions supported by Higgsfield's API:
 
 ### 1. Define the model
 
-- [ ] Add `src/generation/catalog/genjutsu-light.ts`.
-- [ ] Register it in `src/generation/catalog/index.ts`, first among video
+- [x] Add `src/generation/catalog/genjutsu-light.ts`.
+- [x] Register it in `src/generation/catalog/index.ts`, first among video
   models.
-- [ ] Declare surface `video`, one `video` input, up to eight `reference`
+- [x] Declare surface `video`, one `video` input, up to eight `reference`
   image inputs, and resolution as its only setting.
-- [ ] Add Genjutsu-specific product copy: motion transfer, source trimmed to
+- [x] Add Genjutsu-specific product copy: motion transfer, source trimmed to
   15 seconds, and source audio preserved.
-- [ ] Reuse the existing Higgsfield picker mark where appropriate.
+- [x] Reuse the existing Higgsfield picker mark where appropriate.
 
 ### 2. Extend catalog metadata without regressing other models
 
-- [ ] Extend `ModelEntry` with optional per-model prompt configuration:
+- [x] Extend `ModelEntry` with optional per-model prompt configuration:
   required/optional, placeholder, and maximum length.
-- [ ] Add optional minimum media counts per role so a model can require a
+- [x] Add optional minimum media counts per role so a model can require a
   source video and at least one reference image.
-- [ ] Add optional helper text for a media role and enum values (for example,
+- [x] Add optional helper text for a media role and enum values (for example,
   the source-video limit and resolution pricing).
-- [ ] Keep defaults backward-compatible: existing models retain their current
+- [x] Keep defaults backward-compatible: existing models retain their current
   required prompt behavior and media rules unless they opt in.
 
 ### 3. Map and validate the API request
 
-- [ ] Add a dedicated `to-platform.ts` mapper that submits exactly:
+- [x] Add a dedicated `to-platform.ts` mapper that submits exactly:
 
   ```json
   {
@@ -65,48 +65,48 @@ settings, validation, and result actions supported by Higgsfield's API:
   }
   ```
 
-- [ ] Use endpoint `higgsfield/genjutsu-light/motion-transfer/v1.0`.
-- [ ] Validate server-side that there is exactly one video and one to eight
+- [x] Use endpoint `higgsfield/genjutsu-light/motion-transfer/v1.0`.
+- [x] Validate server-side that there is exactly one video and one to eight
   reference images; reject malformed calls even if client validation is
   bypassed.
-- [ ] Preserve an intentionally empty prompt as `""`; do not omit it.
+- [x] Preserve an intentionally empty prompt as `""`; do not omit it.
 
 ### 4. Adapt the composer
 
-- [ ] Allow Generate with an empty prompt for this model.
-- [ ] Limit its prompt editor to 10,000 characters and use a model-specific
+- [x] Allow Generate with an empty prompt for this model.
+- [x] Limit its prompt editor to 10,000 characters and use a model-specific
   placeholder that explains the prompt is optional.
-- [ ] Disable Generate until a source video and at least one reference image
+- [x] Disable Generate until a source video and at least one reference image
   are attached; make the tooltip name the missing input(s).
-- [ ] Show the video-input note: “First 15 seconds are used; source audio is
+- [x] Show the video-input note: “First 15 seconds are used; source audio is
   preserved.”
-- [ ] Render resolution options with their rates: `480p · $0.05/s`,
+- [x] Render resolution options with their rates: `480p · $0.05/s`,
   `720p · $0.10/s`, and `1080p · $0.20/s`.
-- [ ] Ensure the model picker describes the one-video / one-to-eight-image
+- [x] Ensure the model picker describes the one-video / one-to-eight-image
   motion-transfer workflow.
 
 ### 5. Preserve all delivered result assets
 
-- [ ] Extend the platform status/result types to retain `video.url` plus any
+- [x] Extend the platform status/result types to retain `video.url` plus any
   returned `zip.url`, `mov.url`, `jsx.url`, `fbx.url`, and `ply.url`.
-- [ ] Store those assets with the run history while preserving existing history
+- [x] Store those assets with the run history while preserving existing history
   compatibility.
-- [ ] Keep `video.url` as the gallery preview/playback asset.
-- [ ] Add individual download actions for extra result files in the viewer,
+- [x] Keep `video.url` as the gallery preview/playback asset.
+- [x] Add individual download actions for extra result files in the viewer,
   only when they are present.
 
 ### 6. Verify and document
 
 - [ ] Add focused tests for the request mapper, catalog defaults, media
   validation, and result-status normalization.
-- [ ] Run type checking and a production build.
+- [x] Run type checking and a production build.
 - [ ] Manually check Genjutsu Light: empty prompt accepted; missing video or
   reference image blocked; one and eight image references accepted; only the
   resolution control appears; result video plays; optional artifacts download.
 - [ ] Regression-check at least one existing image model and one existing video
   model to confirm their prompt, media, settings, generation, and viewer flows
   are unchanged.
-- [ ] Update the README model count/list and environment/setup notes if the
+- [x] Update the README model count/list and environment/setup notes if the
   implementation changes any user-facing behavior.
 
 ## Delivery order
