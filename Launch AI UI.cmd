@@ -37,7 +37,7 @@ powershell -NoProfile -Command "if (Get-NetTCPConnection -LocalPort 3000 -State 
 if not errorlevel 1 exit /b 0
 
 echo Starting AI UI. A server window will remain open while the app is running.
-start "AI UI server" cmd /k "cd /d ""%CD%"" ^&^& pnpm dev"
+start "AI UI server" /D "%CD%" cmd /k pnpm dev
 
 rem Wait up to 30 seconds for Next.js to listen before opening the browser.
 powershell -NoProfile -Command "$deadline = (Get-Date).AddSeconds(30); while ((Get-Date) -lt $deadline) { if (Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue) { Start-Process 'http://localhost:3000'; exit 0 }; Start-Sleep -Milliseconds 500 }; exit 1"
