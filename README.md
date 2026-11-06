@@ -41,8 +41,8 @@ Next.js 16 App Router on Vercel · React 19 · plain CSS · Zustand · pnpm
   audio, batch size, prompt enhancement — each model declares its own allow-list
   and the studio renders exactly that. No parallel hardcoded list.
 - **Media inputs by role.** Start frame, end frame, references, video and audio,
-  each with the per-role cap the model declares. Files upload to Vercel Blob and
-  become public URLs the generate request can carry.
+  each with the per-role cap the model declares. Files upload directly to
+  Higgsfield through short-lived signed URLs; no separate storage account is needed.
 - **Genjutsu Light Motion Transfer.** Transfer a source video's first 15 seconds of motion and
   audio to one to eight reference images. Choose 480p, 720p, or 1080p; a prompt
   is optional.
@@ -100,8 +100,9 @@ Each generate is one object: `{ model, prompt, media, settings }`.
   no studio changes.
 - **Five small Zustand stores** — shared image/video prompt, shared image/video
   media, `settings[modelId]`, and a tiny `active` store. No store per model.
-- **Uploads** go client-direct to Vercel Blob through `/api/blob`, which issues
-  scoped tokens. `blob:` URLs are preview-only.
+- **Uploads** use Higgsfield's signed upload flow. The server asks Higgsfield for
+  a short-lived upload URL using the visitor's saved key; the browser uploads
+  directly without receiving that key or a separate storage credential.
 
 ---
 
@@ -133,12 +134,10 @@ Open the studio, press **Add key**, and paste your platform key as `id:secret`.
 
 ```bash
 HF_API_BASE_URL=https://api.higgsfield.ai
-OPEN_HIGGSFIELD_READ_WRITE_TOKEN=     # Vercel Blob read-write token
 ```
 
-Copy `.env.example` to `.env.local`, then add the Blob token. Each visitor
-provides their own Higgsfield `id:secret` key in the app; do not put that key
-in an environment file.
+Copy `.env.example` to `.env.local`. Each visitor provides their own Higgsfield
+`id:secret` key in the app; do not put that key in an environment file.
 
 ### Commands
 
@@ -157,7 +156,7 @@ in an environment file.
 ```
 src/
   app/          /  is the full-viewport studio and the only page
-                /api/blob issues upload tokens
+                /api/upload prepares Higgsfield signed uploads
                 base.css owns the document canvas
   generation/   generate requests, server actions, API mapping, catalog, stores
   openhiggsfield/

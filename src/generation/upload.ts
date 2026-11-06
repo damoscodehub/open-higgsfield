@@ -1,22 +1,32 @@
-import { put } from "@vercel/blob/client";
-
 export async function uploadMedia(file: File): Promise<{ url: string }> {
-  const res = await fetch("/api/blob", {
+  const res = await fetch("/api/upload", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      type: "blob.generate-client-token",
-      payload: { pathname: file.name, clientPayload: null, multipart: false },
-    }),
+    body: JSON.stringify({ contentType: file.type }),
   });
-  if (!res.ok) throw new Error("Failed to retrieve the client token");
-  const { clientToken, pathname } = (await res.json()) as {
-    clientToken?: unknown;
-    pathname?: unknown;
-  };
-  if (typeof clientToken !== "string" || typeof pathname !== "string") {
-    throw new Error("Failed to retrieve the client token");
+  const payload = (await res.json().catch(() => null)) as {
+    error?: unknown;
+    uploadUrl?: unknown;
+    uploadHeaders?: unknown;
+    publicUrl?: unknown;
+  } | null;
+  if (!res.ok) {
+    throw new Error(typeof payload?.error === "string" ? payload.error : "Unable to prepare upload");
   }
-  const blob = await put(pathname, file, { access: "public", token: clientToken });
-  return { url: blob.url };
+  if (
+    typeof payload?.uploadUrl !== "string" ||
+    typeof payload.publicUrl !== "string" ||
+    payload.uploadHeaders === null ||
+    typeof payload.uploadHeaders !== "object" ||
+    Array.isArray(payload.uploadHeaders)
+  ) throw new Error("Invalid upload response");
+
+  const upload = await fetch(payload.uploadUrl, {
+    method: "PUT",
+    headers: payload.uploadHeaders as Record<string, string>,
+    body: file,
+    credentials: "omit",
+  });
+  if (!upload.ok) throw new Error("Higgsfield rejected the file upload");
+  return { url: payload.publicUrl };
 }
