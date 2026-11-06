@@ -36,8 +36,8 @@ interface Asset {
   art?: string;
 }
 
-/** Everything a role can be filled from: files this browser sent to Blob, and
-    the finished runs already in the history. Both are public URLs the plane can
+/** Everything a role can be filled from: files this browser sent to Higgsfield,
+    and finished runs already in history. Both are media URLs the plane can
     carry, so the picker treats them as one library cut along two tabs. */
 export function AssetPicker({
   model,
@@ -413,7 +413,7 @@ const AssetTile = memo(function AssetTile({
           <AudioIcon size={20} />
         </span>
       ) : (
-        /* Blob and platform CDN hosts both; next/image would need every
+        /* Higgsfield upload and platform CDN hosts both; next/image would need every
            provider domain allow-listed up front for a 112px thumb. */
         /* eslint-disable-next-line @next/next/no-img-element */
         <img className="ohf-asset-media" src={asset.url} alt="" loading="lazy" />
