@@ -22,7 +22,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     });
     const payload = await readJson(response);
     if (!response.ok) {
-      return NextResponse.json({ error: "Higgsfield could not prepare this upload" }, { status: response.status });
+      return NextResponse.json({ error: messageForHiggsfieldStatus(response.status) }, { status: response.status });
     }
 
     const signedUpload = parseSignedUpload(payload);
@@ -33,11 +33,24 @@ export async function POST(request: Request): Promise<NextResponse> {
     // The signed URL is returned only to perform this one upload. Never log it.
     return NextResponse.json(signedUpload);
   } catch (error) {
-    const message = error instanceof Error && error.message === "Missing platform key"
-      ? "Add your Higgsfield API key before uploading"
-      : "Unable to prepare the upload";
+    const message = messageForSetupError(error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
+}
+
+function messageForHiggsfieldStatus(status: number): string {
+  if (status === 401 || status === 403) return "Higgsfield rejected your API key";
+  if (status === 429) return "Higgsfield is rate limiting uploads; try again shortly";
+  return `Higgsfield could not prepare this upload (HTTP ${status})`;
+}
+
+function messageForSetupError(error: unknown): string {
+  if (!(error instanceof Error)) return "Unable to prepare the upload";
+  if (error.message === "Missing platform key") return "Add your Higgsfield API key before uploading";
+  if (error.message === "Missing HF_API_BASE_URL") {
+    return "Set HF_API_BASE_URL to https://api.higgsfield.ai in .env.local, then restart the app";
+  }
+  return "Unable to prepare the upload";
 }
 
 async function readJson(response: Response): Promise<unknown> {
